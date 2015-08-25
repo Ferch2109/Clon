@@ -4,10 +4,12 @@
 
 ### Facultad de Ciencias
 #### Ciencias de la Computación
----
+----
+  
   - Maestro: Salvador López Mendoza
   - Ayudante: Claudia Ivette Ramírez García
   - Ayud. Lab.	Kimberly Becerril Fuentes
----
+  
+----
 #### Ángel Iván Gladín García
 ##### github: angelgladin
