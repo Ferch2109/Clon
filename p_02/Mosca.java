@@ -1,7 +1,9 @@
 /**
  * Programa para trabajar con metodos de la clase String
- * @author  ...
- * @version ...
+ * @author  Angel Gladin
+ * @version 1.0
+ *
+ * ICC
  */
 
 public class Mosca {
@@ -11,14 +13,13 @@ public class Mosca {
   
     System.out.println("Cadena original: \"" + frase + "\"");
     //Imprimir la longitud de la cadena
-    System.out.println("Longitud de la cadena: ");  
+    System.out.println("Longitud de la cadena: " + frase.length() );  
 
-    frase1 = "";  // Eliminar los blancos al final de la frase
-    System.out.println("Longitud de la cadena sin espacios:  ");
+    frase1 = frase.substring(0, frase.length()-5);  // Eliminar los blancos al final de la frase
+    System.out.println("Longitud de la cadena sin espacios:  " + frase1.length());
 
-    frase2 = ""; //Poner la frase1 en mayúsculas
-    frase3 = "";  // Agregar la frase1 PINTADA DE ROJO
-    
+    frase2 = frase1.toUpperCase(); //Poner la frase1 en mayúsculas
+    frase3 = frase1 + "PINTADA DE ROJO";  // Agregar la frase1 PINTADA DE ROJO
 
     // Imprimir cada "mutación" de la cacddena
     System.out.println("Frase #1: " + frase1);
