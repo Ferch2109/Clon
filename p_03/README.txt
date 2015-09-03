@@ -1,18 +1,15 @@
 -----------------------------------
-		Practica 3
-			Robot
-			JuegoDados
+Practica 3
+Robot
+JuegoDados
 -----------------------------------
 
 -----------------------------------
-
-	Angel Ivan Gladin Garcia
-
+Angel Ivan Gladin Garcia
 -----------------------------------
 
-			---Github---
-		github: angelgladin
-
+-----------------------------------
+---Github---
+github: angelgladin
 https://github.com/angelgladin/ICC
-
 -----------------------------------
