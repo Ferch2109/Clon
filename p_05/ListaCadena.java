@@ -1,3 +1,5 @@
+package mx.unam.ciencias.icc;
+
 /**
  * <p>Clase para listas doblemente ligadas de cadenas.</p>
  *
@@ -6,11 +8,6 @@
  * lista, y otras operaciones básicas.</p>
  *
  * <p>Las listas tienen un iterador para poder recorrerlas.</p>
- *
- * @author Angel Ivan Gladin G
- * @author Eduardo Eder Vazquez Salcedo
- * @version 1.0
- * @date 02-ago-15.
  */
 public class ListaCadena {
 
@@ -26,20 +23,35 @@ public class ListaCadena {
     }
 
     /* Primer elemento de la lista. */
-    private Nodo cabeza = null;
+    private Nodo cabeza;
     /* Último elemento de la lista. */
-    private Nodo rabo = null;
+    private Nodo rabo;
     /* Nodo iterador. */
-    private Nodo iterador = this.cabeza;
+    private Nodo iterador;
     /* Número de elementos en la lista. */
-    private int longitud = 0;
+    private int longitud;
+    
+    /**
+     * Busca si existe un nodo con el parametro de entrada de tipo cadena.
+     * Regresa el nodo que contiene el elemento.
+     * @return el nodo en caso de que exista y <code>null</code> en caso de que no.
+     */
+    private Nodo buscaCadena( String elemento ){
+        Nodo n = cabeza;
+        while( n != null ){
+            if( n.elemento.equals(elemento) )
+                return n;
+            n = n.siguiente;
+        }
+        return null;
+    }
 
     /**
      * Regresa la longitud de la lista.
      * @return la longitud de la lista, el número de elementos que contiene.
      */
     public int getLongitud() {
-        return this.longitud;
+        return longitud;
     }
 
     /**
@@ -48,7 +60,7 @@ public class ListaCadena {
      *         otro caso.
      */
     public boolean esVacia() {
-        return this.longitud == 0;
+        return longitud == 0;
     }
 
     /**
@@ -58,22 +70,17 @@ public class ListaCadena {
      * @param elemento el elemento a agregar.
      */
     public void agregaFinal(String elemento) {
-        Nodo rabo_anterior = null;
-        if (this.longitud > 0){
-            rabo_anterior = this.rabo;
+        Nodo ultimo = new Nodo( elemento );
+        if( longitud == 0 )
+            cabeza = rabo = ultimo;
+        else{
+            ultimo.anterior = rabo;
+            rabo.siguiente = ultimo;
+            rabo = ultimo;
         }
-
-        this.rabo = new Nodo(elemento);
-        this.rabo.siguiente = null;
-        if (this.longitud < 1){
-            this.cabeza = this.rabo;
-            this.rabo.anterior = null;
-        } else {
-            this.rabo.anterior = rabo_anterior;
-            rabo_anterior.siguiente = this.rabo;
-        }
-        this.iterador = this.cabeza;
-        this.longitud += 1;
+        longitud++;
+        iterador = cabeza;
+        // Aquí va su código.
     }
 
     /**
@@ -83,22 +90,17 @@ public class ListaCadena {
      * @param elemento el elemento a agregar.
      */
     public void agregaInicio(String elemento) {
-        Nodo cabeza_anterior = null;
-        if (this.longitud > 0){
-            cabeza_anterior = this.cabeza;
+        Nodo primero = new Nodo( elemento );
+        if( longitud == 0 )
+            cabeza = rabo = primero;
+        else{
+            cabeza.anterior = primero;
+            primero.siguiente = cabeza;
+            cabeza = primero;
         }
-
-        this.cabeza = new Nodo(elemento);
-        this.cabeza.anterior = null;
-        if (this.longitud < 1){
-            this.rabo = this.cabeza;
-            this.cabeza.siguiente = null;
-        } else {
-            this.cabeza.siguiente = cabeza_anterior;
-            cabeza_anterior.anterior = this.cabeza;
-        }
-        this.iterador = this.cabeza;
-        this.longitud += 1;
+        longitud++;
+        iterador = cabeza;
+        // Aquí va su código.
     }
 
     /**
@@ -108,31 +110,23 @@ public class ListaCadena {
      * @param elemento el elemento a eliminar.
      */
     public void elimina(String elemento) {
-        this.primero();
-        while (this.iteradorValido()) {
-            if(this.iterador.elemento.equals(elemento))
-            {
-                if(this.longitud == 1){
-                    this.cabeza = null;
-                    this.rabo = null;
-                } else if (this.iterador.equals(this.cabeza)) {
-                    this.cabeza = this.cabeza.siguiente;
-                    this.cabeza.anterior = null;
-                } else if (this.iterador.equals(this.rabo)){
-                    this.rabo = this.rabo.anterior;
-                    this.rabo.siguiente = null;
-                } else {
-                    Nodo siguiente = this.iterador.siguiente;
-                    this.iterador = this.iterador.anterior;
-                    siguiente.anterior = this.iterador;
-                    this.iterador.siguiente = siguiente;
-                }
-                this.longitud -= 1;
-                break;
+        Nodo n = cabeza;
+        while( n != null ){
+            if( n.elemento.equals(elemento) ){
+                if( n.anterior == null )
+                    eliminaPrimero();
+                else if( n.siguiente == null )
+                    eliminaUltimo();
+                else{
+                    n.siguiente.anterior = n.anterior;
+                    n.anterior.siguiente = n.siguiente;
+                    longitud--;
+                }   
+                iterador = cabeza;
             }
-            this.iterador = this.iterador.siguiente;
-        }
-        this.primero();
+            n = n.siguiente;
+        }   
+        // Aquí va su código.
     }
 
     /**
@@ -141,14 +135,18 @@ public class ListaCadena {
      *         <code>null</code> si la lista está vacía.
      */
     public String eliminaPrimero() {
-        if (this.cabeza != null) {
-            Nodo anterior = this.cabeza;
-            this.cabeza = this.cabeza.siguiente;   
-            this.cabeza.anterior = null;
-            this.longitud -= 1;
-            return anterior.elemento;
+        String e = ( cabeza != null ) ? cabeza.elemento : null;
+        if( longitud != 0 ){
+            if( cabeza != rabo ){
+                cabeza = cabeza.siguiente;
+                cabeza.anterior = null;
+            }
+            else
+                cabeza = rabo = null;
+            longitud--;
         }
-        return null;
+        return e;
+        // Aquí va su código.
     }
 
     /**
@@ -157,15 +155,18 @@ public class ListaCadena {
      *         <code>null</code> si la lista está vacía.
      */
     public String eliminaUltimo() {
-        // Aquí va su código.
-        if (this.rabo != null) {
-            Nodo anterior = this.rabo;
-            this.rabo = this.rabo.anterior;   
-            this.rabo.siguiente = null;
-            this.longitud -= 1;
-            return anterior.elemento;
+        String e = ( rabo != null ) ? rabo.elemento : null;
+        if( longitud != 0 ){
+            if( rabo.equals(cabeza) )
+                rabo = cabeza = null;
+            else{
+                rabo = rabo.anterior;
+                rabo.siguiente = null;
+            }
+            longitud--;
         }
-        return null;
+        return e;
+        // Aquí va su código.
     }
 
     /**
@@ -175,15 +176,8 @@ public class ListaCadena {
      *         <tt>false</tt> en otro caso.
      */
     public boolean contiene(String elemento) {
-        this.primero();
-        while (this.iteradorValido()) {
-            if (this.iterador.elemento.equals(elemento)) {
-                return true; 
-            }
-            this.iterador = this.iterador.siguiente;
-        }
-        this.primero();
-        return false;
+        return buscaCadena( elemento ) != null;
+        // Aquí va su código.
     }
 
     /**
@@ -191,14 +185,14 @@ public class ListaCadena {
      * @return una nueva lista que es la reversa la que manda llamar el método.
      */
     public ListaCadena reversa() {
+        Nodo n = rabo;
         ListaCadena reversa = new ListaCadena();
-        this.ultimo();
-        while (this.iteradorValido()) {
-            reversa.agregaFinal(this.iterador.elemento);
-            this.iterador = this.iterador.anterior;
+        while( n != null ){
+            reversa.agregaFinal( n.elemento );
+            n = n.anterior;
         }
-        this.primero();
         return reversa;
+        // Aquí va su código.
     }
 
     /**
@@ -207,14 +201,15 @@ public class ListaCadena {
      * @return una copiad de la lista.
      */
     public ListaCadena copia() {
+        Nodo n = cabeza;
         ListaCadena copia = new ListaCadena();
-        this.primero();
-        while (this.iteradorValido()) {
-            copia.agregaFinal(this.iterador.elemento);
-            this.iterador = this.iterador.siguiente;
+        while( n != null ){
+            copia.agregaFinal( n.elemento );
+            n = n.siguiente;
+            copia.longitud++;
         }
-        this.primero();
         return copia;
+        // Aquí va su código.
     }
 
     /**
@@ -222,21 +217,9 @@ public class ListaCadena {
      * eliminar todos los elementos de la lista.
      */
     public void limpia() {
-        this.primero();
-        while (this.iteradorValido()) {
-            if(this.longitud == 1){
-                this.cabeza = null;
-                this.rabo = null;
-                this.longitud = 0;
-                break;
-            } else {
-                Nodo anterior = this.cabeza;
-                this.cabeza = this.cabeza.siguiente;   
-                this.cabeza.anterior = null;
-                this.primero();
-                this.longitud -= 1;
-            }
-        }
+        cabeza = rabo = null;
+        longitud = 0;
+        // Aquí va su código.
     }
 
     /**
@@ -245,10 +228,8 @@ public class ListaCadena {
      *         es vacía.
      */
     public String getPrimero() {
-        if (this.longitud == 0) {
-            return null;
-        }
-        return this.cabeza.elemento;
+        return ( cabeza != null ) ? cabeza.elemento : null;
+        // Aquí va su código.
     }
 
     /**
@@ -257,10 +238,8 @@ public class ListaCadena {
      *         es vacía.
      */
     public String getUltimo() {
-        if (this.longitud == 0) {
-            return null;
-        }
-        return this.rabo.elemento;
+        return ( rabo != null ) ? rabo.elemento : null;
+        // Aquí va su código.
     }
 
     /**
@@ -273,17 +252,15 @@ public class ListaCadena {
      *         <tt>null</tt> en otro caso.
      */
     public String get(int i) {
-        this.primero();
-        int x = 0;
-        while (this.iteradorValido() && x < i) {
-            this.siguiente();
-            x += 1;
+        Nodo n = cabeza;
+        String e = null;
+        if( i>=0 && i< longitud ){
+            for( int a = i; a>0; a-- )
+                n = n.siguiente;
+            e = n.elemento;
         }
-        if (x == i && this.iteradorValido()){
-            return this.iterador.elemento;
-        }
-        return null;
-
+        return e;
+        // Aquí va su código.
     }
 
     /**
@@ -293,17 +270,18 @@ public class ListaCadena {
      *         no está contenido en la lista.
      */
     public int indiceDe(String elemento) {
-        this.primero();
-        int i = 0;
-        while (this.iteradorValido()) {
-            if (this.iterador.elemento.equals(elemento)) {
-                return i; 
+        Nodo n = cabeza;
+        int indice = 0;
+        if( buscaCadena( elemento ) != null && longitud != 0 ){
+            while( !n.elemento.equals( elemento ) ){
+                indice++;
+                n = n.siguiente;
             }
-            this.iterador = this.iterador.siguiente;
-            i += 1;
         }
-        this.primero();
-        return -1;
+        else 
+            indice = -1;
+        return indice;
+        // Aquí va su código.
     }
 
     /**
@@ -311,42 +289,47 @@ public class ListaCadena {
      * @return una representación en cadena de la lista.
      */
     public String toString() {
-        // Aquí va su código.
-        String cadena = "";
-        this.primero();
-        while (this.iteradorValido()) {
-            cadena += this.get() + " ";
-            this.siguiente();
+        Nodo n = cabeza;
+        String lista = "[";
+        while( n != rabo ){
+            lista += String.format( "%s, " , n.elemento );
+            n = n.siguiente;
         }
-        return cadena;
+        lista+= String.format( "%s]" , n.elemento );
+        return lista;
+        // Aquí va su código.
     }
 
     /**
      * Mueve el iterador de la lista a su primer elemento.
      */
     public void primero() {
-        this.iterador = this.cabeza;
+        iterador = cabeza;
+        // Aquí va su código.
     }
 
     /**
      * Mueve el iterador de la lista a su último elemento.
      */
     public void ultimo() {
-        this.iterador = this.rabo;
+        iterador = rabo;
+        // Aquí va su código.
     }
 
     /**
      * Mueve el iterador al siguiente elemento.
      */
     public void siguiente() {
-        this.iterador = this.iterador.siguiente;
+        iterador = iterador.siguiente;
+        // Aquí va su código.
     }
 
     /**
      * Mueve el iterador al elemento anterior.
      */
     public void anterior() {
-        this.iterador = this.iterador.anterior;
+        iterador = iterador.anterior;
+        // Aquí va su código.
     }
 
     /**
@@ -355,7 +338,8 @@ public class ListaCadena {
      *         iterador es inválido.
      */
     public String get() {
-        return this.iterador.elemento;
+        return (( iterador != null ) ? iterador.elemento : null);
+        // Aquí va su código.
     }
 
     /**
@@ -364,7 +348,7 @@ public class ListaCadena {
      *         caso.
      */
     public boolean iteradorValido() {
+        return iterador != null;
         // Aquí va su código.
-        return this.iterador != null;
     }
 }
