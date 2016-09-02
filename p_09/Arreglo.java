@@ -15,21 +15,13 @@ public class Arreglo{
      * @param arr El arreglo a ordenar.
      */
     public static int[] selectionSort(int[] arr){
-    	int aux;
-    	int i,j;
-    	int arrLength = arr.length;
-
-    	for (i = 0; i<arrLength; i++) {
-    		for (j = i+1; j<arrLength; j++) {
-    			if(arr[i] > arr[j]){
-    				aux = arr[i];
-    				arr[i] = arr[j];
-    				arr[j] = aux;
-    			}
-    		}    		
-    	}
-
-    	return arr;
+    	for( int x = 0; x < arr.length ; x++ ){
+            int min = x;
+            for( int i = x+1; i < arr.length; i++ )
+                if( arr[i].compareTo( arr[min] ) == -1 )
+                    min = i;
+            changeArray( x, min, arr );
+        }
     }
 
     /**
@@ -142,32 +134,21 @@ public class Arreglo{
      * @param elemento El elemento a buscar
      */
     public static int busquedaBinaria(int[] arr, int elemento){
-        //Ordenar el arreglo
-        //arr = mergeSort(arr);
-
-    	int firstPos = 0;
-    	int lastPos = arr.length - 1;
-    	int midPos;
-
-    	while(firstPos <= lastPos){
-    		midPos = (lastPos + firstPos)/2;
-    		if(elemento == arr[midPos]){
-    			return midPos;
-    		}else if(elemento < arr[midPos]){
-            	//Si el elemento a buscar es menor que el elemento en medio del
-            	//arreglo entonces la posicionFinal sera la posicion de en medio
-            	//menos 1, para asi solo buscar en los elementos menores de la
-            	//posicion de enmedio del arreglo
-    			lastPos = midPos - 1;
-    		}else if(elemento >= arr[midPos]){
-            	//Emepezar a buscar el los elementos mayores o iguales de la
-            	//posicion de en medio del arreglo
-    			firstPos = midPos +1;
-    		}
-    	}
-
-    	return -1;
+        int i = 0;
+        int j = arr.length-1;
+        int p;
+        while( i <= j ){
+          p = ( i+j )/2;
+          if ( arr[p].compareTo( elemento ) == 0 )
+              return p;
+          else if ( arr[p].compareTo( elemento ) == 1 )
+              j = p-1;
+          else
+              i = p+1;
+        }
+        return -1;
     }
+
     public static void main(String[] args) {
     	int[] b = {1,2,3,4,5,6};
     	int[] c = {1,6,9,11,56,90};
